@@ -6,9 +6,9 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Shopsys\FrameworkBundle\Component\DataFixture\AbstractReferenceFixture;
 use Shopsys\FrameworkBundle\Component\Domain\Domain;
-use Shopsys\FrameworkBundle\Model\Category\Category;
 use Shopsys\FrameworkBundle\Model\Category\CategoryData;
 use Shopsys\FrameworkBundle\Model\Category\CategoryDomain;
+use Shopsys\ShopBundle\Model\ExtendedCategory;
 
 class CategoryRootDataFixture extends AbstractReferenceFixture implements DependentFixtureInterface
 {
@@ -19,7 +19,7 @@ class CategoryRootDataFixture extends AbstractReferenceFixture implements Depend
      */
     public function load(ObjectManager $manager)
     {
-        $rootCategory = new Category(new CategoryData());
+        $rootCategory = new ExtendedCategory(new CategoryData());
         $manager->persist($rootCategory);
         $manager->flush($rootCategory);
         $this->addReference(self::CATEGORY_ROOT, $rootCategory);

@@ -10,6 +10,7 @@ use Shopsys\FrameworkBundle\Component\Utils;
 use Shopsys\FrameworkBundle\Model\Localization\AbstractTranslatableEntity;
 use Shopsys\FrameworkBundle\Model\Pricing\Vat\Vat;
 use Shopsys\FrameworkBundle\Model\Product\Availability\Availability;
+use Shopsys\ShopBundle\Model\ExtendedProduct;
 
 /**
  * Product
@@ -339,7 +340,7 @@ class Product extends AbstractTranslatableEntity
      */
     public static function create(ProductData $productData)
     {
-        return new self($productData, null);
+        return new ExtendedProduct($productData, null);
     }
 
     /**
@@ -349,7 +350,7 @@ class Product extends AbstractTranslatableEntity
      */
     public static function createMainVariant(ProductData $productData, array $variants)
     {
-        return new self($productData, $variants);
+        return new ExtendedProduct($productData, $variants);
     }
 
     /**

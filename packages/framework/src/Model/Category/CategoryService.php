@@ -2,6 +2,8 @@
 
 namespace Shopsys\FrameworkBundle\Model\Category;
 
+use Shopsys\ShopBundle\Model\ExtendedCategory;
+
 class CategoryService
 {
     /**
@@ -11,7 +13,7 @@ class CategoryService
      */
     public function create(CategoryData $categoryData, Category $rootCategory)
     {
-        $category = new Category($categoryData);
+        $category = new ExtendedCategory($categoryData);
         if ($category->getParent() === null) {
             $category->setParent($rootCategory);
         }

@@ -20,6 +20,7 @@ use Shopsys\FrameworkBundle\Model\Order\Preview\OrderPreviewFactory;
 use Shopsys\FrameworkBundle\Model\Order\PromoCode\CurrentPromoCodeFacade;
 use Shopsys\FrameworkBundle\Model\Order\Status\OrderStatus;
 use Shopsys\FrameworkBundle\Model\Order\Status\OrderStatusRepository;
+use Shopsys\ShopBundle\Model\ExtendedOrder;
 
 class OrderFacade
 {
@@ -179,7 +180,7 @@ class OrderFacade
 
         $this->setOrderDataAdministrator($orderData);
 
-        $order = new Order(
+        $order = new ExtendedOrder(
             $orderData,
             $orderNumber,
             $orderUrlHash,
