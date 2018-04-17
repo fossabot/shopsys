@@ -7,6 +7,7 @@ use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\ORM\Tools\SchemaTool;
 use Shopsys\FrameworkBundle\Component\EntityExtension\EntityExtensionParentMetadataCleanerEventSubscriber;
+use Shopsys\FrameworkBundle\Component\EntityExtension\EntityNameResolver;
 use Shopsys\FrameworkBundle\Model\Category\Category;
 use Shopsys\FrameworkBundle\Model\Order\Item\OrderItem;
 use Shopsys\FrameworkBundle\Model\Order\Item\OrderPayment;
@@ -76,7 +77,7 @@ class EntityExtensionTest extends DatabaseTestCase
             CategoryOneToManyBidirectionalEntity::class,
         ];
 
-        $this->overwriteEntityExtensionEventSubscribers($entityExtensionMap);
+        $this->overwriteEntityExtensionMapInServicesInContainer($entityExtensionMap);
 
         $testEntities = array_merge($newEntities, array_values($entityExtensionMap));
         $metadata = $this->getMetadata($testEntities);
@@ -101,15 +102,18 @@ class EntityExtensionTest extends DatabaseTestCase
     /**
      * @param string[] $entityExtensionMap
      */
-    public function overwriteEntityExtensionEventSubscribers(array $entityExtensionMap): void
+    public function overwriteEntityExtensionMapInServicesInContainer(array $entityExtensionMap): void
     {
         $loadORMMetadataSubscriber = $this->getContainer()->get('joschi127_doctrine_entity_override.event_subscriber.load_orm_metadata');
         /* @var $loadORMMetadataSubscriber \Tests\ShopBundle\Database\EntityExtension\OverwritableLoadORMMetadataSubscriber */
         $cleanerEventSubscriber = $this->getContainer()->get(EntityExtensionParentMetadataCleanerEventSubscriber::class);
         /* @var $cleanerEventSubscriber \Tests\ShopBundle\Database\EntityExtension\OverwritableEntityExtensionParentMetadataCleanerEventSubscriber */
+        $entityNameResolver = $this->getContainer()->get(EntityNameResolver::class);
+        /* @var $entityNameResolver \Tests\ShopBundle\Database\EntityExtension\OverwritableEntityNameResolver */
 
         $loadORMMetadataSubscriber->overwriteEntityExtensionMap($entityExtensionMap);
         $cleanerEventSubscriber->overwriteEntityExtensionMap($entityExtensionMap);
+        $entityNameResolver->overwriteEntityExtensionMap($entityExtensionMap);
     }
 
     /**
@@ -148,6 +152,10 @@ class EntityExtensionTest extends DatabaseTestCase
         $this->doTestExtendedProductPersistence();
         $this->doTestExtendedCategoryPersistence();
         $this->doTestExtendedOrderItemsPersistence();
+
+        $this->doTestExtendedProductInstantiation();
+        $this->doTestExtendedCategoryInstantiation();
+        $this->doTestExtendedOrderItemsInstantiation();
     }
 
     /**
@@ -486,5 +494,89 @@ class EntityExtensionTest extends DatabaseTestCase
         $result = $query->getSingleResult();
         $this->assertInstanceOf(ExtendedOrderItem::class, $result);
         return $result;
+    }
+
+    private function doTestExtendedProductInstantiation(): void
+    {
+        $repository = $this->em->getRepository(Product::class);
+        $this->assertInstanceOf(ExtendedProduct::class, $repository->find(self::MAIN_PRODUCT_ID));
+
+        $query = $this->em->createQuery('SELECT p FROM ' . Product::class . ' p WHERE p.id = :id')
+            ->setParameter('id', self::MAIN_PRODUCT_ID);
+        $this->assertInstanceOf(ExtendedProduct::class, $query->getSingleResult());
+
+        $qb = $this->em->createQueryBuilder();
+        $qb->from(Product::class, 'p')
+            ->select('p')
+            ->where('p.id = :id')
+            ->setParameter(':id', self::MAIN_PRODUCT_ID);
+        $this->assertInstanceOf(ExtendedProduct::class, $qb->getQuery()->getSingleResult());
+
+        $product = $this->em->find(Product::class, self::MAIN_PRODUCT_ID);
+        $this->assertInstanceOf(ExtendedProduct::class, $product);
+    }
+
+    private function doTestExtendedCategoryInstantiation(): void
+    {
+        $repository = $this->em->getRepository(Category::class);
+        $this->assertInstanceOf(ExtendedCategory::class, $repository->find(self::MAIN_CATEGORY_ID));
+
+        $query = $this->em->createQuery('SELECT c FROM ' . Category::class . ' c WHERE c.id = :id')
+            ->setParameter('id', self::MAIN_CATEGORY_ID);
+        $this->assertInstanceOf(ExtendedCategory::class, $query->getSingleResult());
+
+        $qb = $this->em->createQueryBuilder();
+        $qb->from(Category::class, 'c')
+            ->select('c')
+            ->where('c.id = :id')
+            ->setParameter(':id', self::MAIN_CATEGORY_ID);
+        $this->assertInstanceOf(ExtendedCategory::class, $qb->getQuery()->getSingleResult());
+
+        $category = $this->em->find(Category::class, self::MAIN_CATEGORY_ID);
+        $this->assertInstanceOf(ExtendedCategory::class, $category);
+    }
+
+    private function doTestExtendedOrderItemsInstantiation(): void
+    {
+        $repository = $this->em->getRepository(OrderItem::class);
+        $this->assertInstanceOf(ExtendedOrderTransport::class, $repository->find(self::ORDER_TRANSPORT_ID));
+        $this->assertInstanceOf(ExtendedOrderPayment::class, $repository->find(self::ORDER_PAYMENT_ID));
+        $this->assertInstanceOf(ExtendedOrderProduct::class, $repository->find(self::ORDER_PRODUCT_ID));
+
+        $query = $this->em->createQuery('SELECT i FROM ' . OrderItem::class . ' i WHERE i.id = :id')
+            ->setParameter('id', self::ORDER_TRANSPORT_ID);
+        $this->assertInstanceOf(ExtendedOrderTransport::class, $query->getSingleResult());
+        $query = $this->em->createQuery('SELECT i FROM ' . OrderItem::class . ' i WHERE i.id = :id')
+            ->setParameter('id', self::ORDER_PAYMENT_ID);
+        $this->assertInstanceOf(ExtendedOrderPayment::class, $query->getSingleResult());
+        $query = $this->em->createQuery('SELECT i FROM ' . OrderItem::class . ' i WHERE i.id = :id')
+            ->setParameter('id', self::ORDER_PRODUCT_ID);
+        $this->assertInstanceOf(ExtendedOrderProduct::class, $query->getSingleResult());
+
+        $qb = $this->em->createQueryBuilder();
+        $qb->from(OrderItem::class, 'i')
+            ->select('i')
+            ->where('i.id = :id')
+            ->setParameter(':id', self::ORDER_TRANSPORT_ID);
+        $this->assertInstanceOf(ExtendedOrderTransport::class, $qb->getQuery()->getSingleResult());
+        $qb = $this->em->createQueryBuilder();
+        $qb->from(OrderItem::class, 'i')
+            ->select('i')
+            ->where('i.id = :id')
+            ->setParameter(':id', self::ORDER_PAYMENT_ID);
+        $this->assertInstanceOf(ExtendedOrderPayment::class, $qb->getQuery()->getSingleResult());
+        $qb = $this->em->createQueryBuilder();
+        $qb->from(OrderItem::class, 'i')
+            ->select('i')
+            ->where('i.id = :id')
+            ->setParameter(':id', self::ORDER_PRODUCT_ID);
+        $this->assertInstanceOf(ExtendedOrderProduct::class, $qb->getQuery()->getSingleResult());
+
+        $orderTransport = $this->em->find(OrderItem::class, self::ORDER_TRANSPORT_ID);
+        $this->assertInstanceOf(ExtendedOrderTransport::class, $orderTransport);
+        $orderPayment = $this->em->find(OrderItem::class, self::ORDER_PAYMENT_ID);
+        $this->assertInstanceOf(ExtendedOrderPayment::class, $orderPayment);
+        $orderProduct = $this->em->find(OrderItem::class, self::ORDER_PRODUCT_ID);
+        $this->assertInstanceOf(ExtendedOrderProduct::class, $orderProduct);
     }
 }
