@@ -14,7 +14,7 @@ RUN apt-get update && apt-get -y install acl
 RUN apt-get update && apt-get -y install git
 
 # Install PostgreSQL client for dumping database
-RUN apt-get update && apt-get -y install postgresql-client-9.5
+RUN apt-get update && apt-get -y install postgresql-client-10
 
 # Install locales and switch to en_US.utf8 in order to enable UTF-8 support.
 # See https://perlgeek.de/en/article/set-up-a-clean-utf8-environment
@@ -43,10 +43,8 @@ RUN php -r "copy('https://getcomposer.org/download/1.5.1/composer.phar', '/usr/l
     && chmod 0755 /usr/local/bin/composer \
     && /usr/local/bin/composer selfupdate --stable
 
-# Install Node.js v6 from NodeSource repository that also contains NPM.
-# See https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions
-RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - \
-    && apt-get update && apt-get -y install nodejs=6.*
+RUN apt-get update && apt-get -y install nodejs
+RUN apt-get update && apt-get -y install npm
 
 # Install grunt-cli using npm to be able to run grunt watch.
 RUN npm install -g grunt-cli
