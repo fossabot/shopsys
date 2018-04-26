@@ -13,7 +13,8 @@ use Shopsys\FrameworkBundle\Component\Transformers\ImagesIdsToImagesTransformer;
 use Shopsys\FrameworkBundle\Component\Transformers\ProductParameterValueToProductParameterValuesLocalizedTransformer;
 use Shopsys\FrameworkBundle\Component\Transformers\RemoveDuplicatesFromArrayTransformer;
 use Shopsys\FrameworkBundle\Form\Admin\Product\Parameter\ProductParameterValueFormType;
-use Shopsys\FrameworkBundle\Form\ImageUploadType;
+use Shopsys\FrameworkBundle\Form\FileUploadType;
+use Shopsys\FrameworkBundle\Form\GroupType;
 use Shopsys\FrameworkBundle\Form\ProductsType;
 use Shopsys\FrameworkBundle\Form\UrlListType;
 use Shopsys\FrameworkBundle\Form\ValidationGroup;
@@ -85,6 +86,8 @@ class ProductEditFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $editedProduct = $options['product'];
+        /* @var $editedProduct \Shopsys\FrameworkBundle\Model\Product\Product|null */
+
         $seoTitlesOptionsByDomainId = [];
         $seoMetaDescriptionsOptionsByDomainId = [];
         $seoH1OptionsByDomainId = [];
@@ -112,9 +115,15 @@ class ProductEditFormType extends AbstractType
             ];
         }
 
+        if ($editedProduct !== null) {
+            $existingImages = $this->imageFacade->getImagesByEntityIndexedById($editedProduct, null);
+        } else {
+            $existingImages = [];
+        }
+
         $builder
             ->add('productData', ProductFormType::class, ['product' => $editedProduct])
-            ->add('images', ImageUploadType::class, [
+            ->add('imagesToUpload', FileUploadType::class, [
                 'required' => false,
                 'multiple' => true,
                 'file_constraints' => [
@@ -126,8 +135,20 @@ class ProductEditFormType extends AbstractType
                             . 'Maximum size of an image is {{ limit }} {{ suffix }}.',
                     ]),
                 ],
-                'entity' => $options['product'],
-                'info_text' => t('You can upload following formats: PNG, JPG, GIF'),
+            ])
+            ->add(
+                $builder->create('orderedImagesById', CollectionType::class, [
+                    'required' => false,
+                    'entry_type' => HiddenType::class,
+                ])->addModelTransformer($this->imagesIdsToImagesTransformer)
+            )
+            ->add('imagesToDelete', ChoiceType::class, [
+                'required' => false,
+                'multiple' => true,
+                'expanded' => true,
+                'choices' => $existingImages,
+                'choice_label' => 'filename',
+                'choice_value' => 'id',
             ])
             ->add($builder->create('parameters', CollectionType::class, [
                     'required' => false,
@@ -141,7 +162,13 @@ class ProductEditFormType extends AbstractType
                     ],
                     'error_bubbling' => false,
                 ])
-                ->addViewTransformer(new ProductParameterValueToProductParameterValuesLocalizedTransformer()))
+                ->addViewTransformer(new ProductParameterValueToProductParameterValuesLocalizedTransformer()));
+
+        $builderSeoGroups = $builder->create('seo', GroupType::class, [
+            'label' => t('SEO'),
+        ]);
+
+        $builderSeoGroups
             ->add('manualInputPricesByPricingGroupId', FormType::class, [
                 'compound' => true,
             ])
@@ -149,16 +176,35 @@ class ProductEditFormType extends AbstractType
                 'entry_type' => TextType::class,
                 'required' => false,
                 'options_by_domain_id' => $seoTitlesOptionsByDomainId,
+                'macro' => [
+                    'name' => 'seoFormRowMacros.multidomainRow',
+                    'recommended_length' => 60,
+                ],
+                'label' => t('Page title'),
+
             ])
             ->add('seoMetaDescriptions', MultidomainType::class, [
                 'entry_type' => TextareaType::class,
                 'required' => false,
                 'options_by_domain_id' => $seoMetaDescriptionsOptionsByDomainId,
+                'macro' => [
+                    'name' => 'seoFormRowMacros.multidomainRow',
+                    'recommended_length' => 60,
+                ],
+                'label' => t('Meta description'),
+                'attr' => [
+                    'class' => 'input--seo',
+                ],
             ])
             ->add('seoH1s', MultidomainType::class, [
                 'entry_type' => TextType::class,
                 'required' => false,
                 'options_by_domain_id' => $seoH1OptionsByDomainId,
+                'macro' => [
+                    'name' => 'seoFormRowMacros.multidomainRow',
+                    'recommended_length' => null,
+                ],
+                'label' => t('Heading (H1)'),
             ])
             ->add('descriptions', MultidomainType::class, [
                 'entry_type' => CKEditorType::class,
@@ -167,11 +213,21 @@ class ProductEditFormType extends AbstractType
             ->add('shortDescriptions', MultidomainType::class, [
                 'entry_type' => TextareaType::class,
                 'required' => false,
-            ])
+            ]);
+
+        if ($editedProduct !== null) {
+            $builderSeoGroups
             ->add('urls', UrlListType::class, [
                 'route_name' => 'front_product_detail',
-                'entity_id' => $editedProduct !== null ? $editedProduct->getId() : null,
-            ])
+                'entity_id' => $editedProduct->getId(),
+                'label' => t('URL settings'),
+            ]);
+        }
+
+        $builderAccessoriesGroups = $builder->create('seo', GroupType::class, [
+            'label' => t('Accessories'),
+        ]);
+        $builderAccessoriesGroups
             ->add(
                 $builder
                     ->create('accessories', ProductsType::class, [
