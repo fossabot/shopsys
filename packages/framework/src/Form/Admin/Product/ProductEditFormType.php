@@ -13,8 +13,8 @@ use Shopsys\FrameworkBundle\Component\Transformers\ImagesIdsToImagesTransformer;
 use Shopsys\FrameworkBundle\Component\Transformers\ProductParameterValueToProductParameterValuesLocalizedTransformer;
 use Shopsys\FrameworkBundle\Component\Transformers\RemoveDuplicatesFromArrayTransformer;
 use Shopsys\FrameworkBundle\Form\Admin\Product\Parameter\ProductParameterValueFormType;
-use Shopsys\FrameworkBundle\Form\FileUploadType;
 use Shopsys\FrameworkBundle\Form\GroupType;
+use Shopsys\FrameworkBundle\Form\ImageUploadType;
 use Shopsys\FrameworkBundle\Form\ProductsType;
 use Shopsys\FrameworkBundle\Form\UrlListType;
 use Shopsys\FrameworkBundle\Form\ValidationGroup;
@@ -115,15 +115,9 @@ class ProductEditFormType extends AbstractType
             ];
         }
 
-        if ($editedProduct !== null) {
-            $existingImages = $this->imageFacade->getImagesByEntityIndexedById($editedProduct, null);
-        } else {
-            $existingImages = [];
-        }
-
         $builder
             ->add('productData', ProductFormType::class, ['product' => $editedProduct])
-            ->add('imagesToUpload', FileUploadType::class, [
+            ->add('images', ImageUploadType::class, [
                 'required' => false,
                 'multiple' => true,
                 'file_constraints' => [
@@ -135,22 +129,11 @@ class ProductEditFormType extends AbstractType
                             . 'Maximum size of an image is {{ limit }} {{ suffix }}.',
                     ]),
                 ],
+                'entity' => $editedProduct,
+                'info_text' => t('You can upload following formats: PNG, JPG, GIF'),
             ])
             ->add(
-                $builder->create('orderedImagesById', CollectionType::class, [
-                    'required' => false,
-                    'entry_type' => HiddenType::class,
-                ])->addModelTransformer($this->imagesIdsToImagesTransformer)
-            )
-            ->add('imagesToDelete', ChoiceType::class, [
-                'required' => false,
-                'multiple' => true,
-                'expanded' => true,
-                'choices' => $existingImages,
-                'choice_label' => 'filename',
-                'choice_value' => 'id',
-            ])
-            ->add($builder->create('parameters', CollectionType::class, [
+                $builder->create('parameters', CollectionType::class, [
                     'required' => false,
                     'allow_add' => true,
                     'allow_delete' => true,
@@ -161,8 +144,8 @@ class ProductEditFormType extends AbstractType
                         ]),
                     ],
                     'error_bubbling' => false,
-                ])
-                ->addViewTransformer(new ProductParameterValueToProductParameterValuesLocalizedTransformer()));
+                ])->addViewTransformer(new ProductParameterValueToProductParameterValuesLocalizedTransformer())
+            );
 
         $builderSeoGroups = $builder->create('seo', GroupType::class, [
             'label' => t('SEO'),
@@ -216,33 +199,15 @@ class ProductEditFormType extends AbstractType
             ]);
 
         if ($editedProduct !== null) {
-            $builderSeoGroups
-            ->add('urls', UrlListType::class, [
+            $builderSeoGroups->add('urls', UrlListType::class, [
                 'route_name' => 'front_product_detail',
                 'entity_id' => $editedProduct->getId(),
                 'label' => t('URL settings'),
             ]);
         }
 
-        $builderAccessoriesGroups = $builder->create('seo', GroupType::class, [
-            'label' => t('Accessories'),
-        ]);
-        $builderAccessoriesGroups
-            ->add(
-                $builder
-                    ->create('accessories', ProductsType::class, [
-                        'required' => false,
-                        'main_product' => $editedProduct,
-                        'sortable' => true,
-                    ])
-                    ->addViewTransformer($this->removeDuplicatesTransformer)
-            )
-            ->add('save', SubmitType::class);
-
-        $this->pluginDataFormExtensionFacade->extendForm($builder, 'product', 'pluginData');
-
         foreach ($this->pricingGroupFacade->getAll() as $pricingGroup) {
-            $builder->get('manualInputPricesByPricingGroupId')
+            $builderSeoGroups->get('manualInputPricesByPricingGroupId')
                 ->add($pricingGroup->getId(), MoneyType::class, [
                     'currency' => false,
                     'scale' => 6,
@@ -261,6 +226,23 @@ class ProductEditFormType extends AbstractType
                     ],
                 ]);
         }
+
+        $builderAccessoriesGroups = $builder->create('seo', GroupType::class, [
+            'label' => t('Accessories'),
+        ]);
+        $builderAccessoriesGroups
+            ->add(
+                $builder
+                    ->create('accessories', ProductsType::class, [
+                        'required' => false,
+                        'main_product' => $editedProduct,
+                        'sortable' => true,
+                    ])
+                    ->addViewTransformer($this->removeDuplicatesTransformer)
+            )
+            ->add('save', SubmitType::class);
+
+        $this->pluginDataFormExtensionFacade->extendForm($builder, 'product', 'pluginData');
 
         if ($editedProduct !== null && $editedProduct->isMainVariant()) {
             $builder->add('variants', ProductsType::class, [

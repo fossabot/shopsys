@@ -154,9 +154,12 @@ class ProductFormType extends AbstractType
                 ],
                 'label' => t('EAN'),
             ] + $this->getDisabledFieldOptionsForFieldName('ean'))
-            ->add('formId', DisplayOnlyTextType::class, [
+            ->add('id', TextType::class, [
                 'label' => t('ID'),
                 'data' => $editedProduct->getId(),
+                'disabled' => true,
+                'attr' => ['readonly' => 'readonly'],
+                'mapped' => false,
             ])
             ->add('flags', ChoiceType::class, [
                 'required' => false,
@@ -369,10 +372,10 @@ class ProductFormType extends AbstractType
             return [];
         }
 
-        $disabledFieldsTitlesInedexedByName = [];
+        $disabledFieldsTitlesIndexedByName = [];
 
         if ($product->isMainVariant()) {
-            $disabledFieldsTitlesInedexedByName = [
+            $disabledFieldsTitlesIndexedByName = [
                 'catnum' => t('This item can be set in product detail of a specific variant'),
                 'partno' => t('This item can be set in product detail of a specific variant'),
                 'ean' => t('This item can be set in product detail of a specific variant'),
@@ -387,12 +390,12 @@ class ProductFormType extends AbstractType
             ];
         }
         if ($product->isVariant()) {
-            $disabledFieldsTitlesInedexedByName = [
-                'categoriesByDomainId',
+            $disabledFieldsTitlesIndexedByName = [
+                'categoriesByDomainId' => '',
             ];
         }
 
-        return $disabledFieldsTitlesInedexedByName;
+        return $disabledFieldsTitlesIndexedByName;
     }
 
     private function getDisabledFieldOptionsForFieldName($fieldName)
