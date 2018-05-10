@@ -1,5 +1,9 @@
 # WIP Glassbox Customization
 
+## Entities
+* visibility of all private properties and methods of DataFactories was changed to protected (@Miroslav-Stopka)
+    * protected visibility allows overriding of behavior from projects
+    
 ## Forms
 * adding a new field into form in administration is now enabled via form type extending, see [prototype](https://github.com/shopsys/shopsys/commit/d6b84bf54c0b47c72eacc82d540987dd8078fa13).
 * extensible [shopsys/framework package](https://github.com/shopsys/framework) forms are:

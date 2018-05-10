@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Changed
+- visibility of all private properties and methods of DataFactories was changed to protected (@Miroslav-Stopka)
+    - protected visibility allows overriding of behavior from projects
 - Doctrine entities are used for storing data instead of using `DataStorageProviderInterface` (@Miroslav-Stopka)
     - previously saved data will be migrated
 - visibility of all private properties and methods of facades was changed to protected (@vitek-rostislav)

@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     - allowing override factory that creates extended entities in project-base
 
 ### Changed
+- visibility of all private properties and methods of DataFactories was changed to protected (@Miroslav-Stopka)
+    - protected visibility allows overriding of behavior from projects
 - unification of terminology - indices and indexes (@Miroslav-Stopka)
     - there is only "indexes" expression used now
 - moved constants with types of environment from [shopsys/project-base](https://github.com/shopsys/project-base) (@PetrHeinz)
