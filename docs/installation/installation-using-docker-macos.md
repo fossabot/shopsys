@@ -37,12 +37,12 @@ Create `docker-sync.yml` from template [`docker-sync.yml.dist`](../../project-ba
 
 ### 2.1 Set the UID and GID to allow file access in mounted volumes
 Because we want both the user in host machine (you) and the user running php-fpm in the container to access shared files, we need to make sure that they both have the same UID and GID.
-This can be achieved by build arguments `www_data_uid` and `www_data_gid` that should be set to the UID and GID as your own user in your `docker-compose.yml`.
+This can be achieved by build arguments `www_data_uid` and `www_data_gid` that should be set to the same UID and GID as your own user in your `docker-compose.yml`.
 Also, you need to change `sync_userid` in `docker-sync.yml` file.
 
 You can find out your UID by running `id -u` and your GID by running `id -g`.
 
-#### 2.1 Fill your credentials into files
+##### Fill your credentials into files
 You need to insert your user id and group id into these two newly created file.
 
 Get user id:
@@ -59,13 +59,7 @@ Set these values into your `docker-compose.yml` into `php-fpm` container definit
 
 Also you need to insert your user id into `docker-sync.yml` into value `sync_userid`.
 
-### 3. Set the UID and GID to allow file access in mounted volumes
-Because we want both the user in host machine (you) and user running php-fpm in the container to access shared files, we need to make sure that they both have the same UID and GID.
-This can be achieved by build arguments `www_data_uid` and `www_data_gid` that should be set in your `docker-compose.yml` to the same UID and GID as your host user.
-
-You can find out your UID by running `id -u` and your GID by running `id -g`.
-
-### 4. Compose Docker container
+### 3. Compose Docker container
 On MacOS you need to synchronize folders using docker-sync.
 Before starting synchronization you need to create a directory for persisting Postgres data so you won't lose it when the container is shut down.
 ```
