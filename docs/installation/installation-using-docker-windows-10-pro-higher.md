@@ -37,7 +37,7 @@ copy docker\conf\docker-compose-win.yml.dist docker-compose.yml
 - Click on `Apply`
 - You will be prompted for your Windows credentials
 
-### 5. Compose Docker container
+### 4. Compose Docker container
 ```
 docker-compose up -d
 ```
