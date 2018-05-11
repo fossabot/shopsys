@@ -35,27 +35,14 @@ cp docker/conf/docker-compose-mac.yml.dist docker-compose.yml
 
 Create `docker-sync.yml` from template [`docker-sync.yml.dist`](../../project-base/docker/conf/docker-sync.yml.dist).
 
-### 2.1 Set the UID and GID to allow file access in mounted volumes
+#### Set the UID and GID to allow file access in mounted volumes
 Because we want both the user in host machine (you) and the user running php-fpm in the container to access shared files, we need to make sure that they both have the same UID and GID.
 This can be achieved by build arguments `www_data_uid` and `www_data_gid` that should be set to the same UID and GID as your own user in your `docker-compose.yml`.
 Also, you need to change `sync_userid` in `docker-sync.yml` file.
 
 You can find out your UID by running `id -u` and your GID by running `id -g`.
 
-##### Fill your credentials into files
-You need to insert your user id and group id into these two newly created file.
-
-Get user id:
-```
-id -u
-```
-
-Get group id:
-```
-id -g
-```
-
-Set these values into your `docker-compose.yml` into `php-fpm` container definition and replace this values in `args` section.
+Once you get these values, set these values into your `docker-compose.yml` into `php-fpm` container definition by replacing values in `args` section.
 
 Also you need to insert your user id into `docker-sync.yml` into value `sync_userid`.
 
