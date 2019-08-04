@@ -141,3 +141,8 @@ front_login_window_form:
     path: /login/form
     defaults: { _controller: ShopsysShopBundle:Front\Login:windowForm }
     methods: [POST]
+
+front_search_analysis_collect_query:
+    path: /_search-analysis/collect-query/
+    defaults: { _controller: ShopsysShopBundle:Front\SearchAnalysis:collectQuery }
+    methods: [POST]

@@ -45,6 +45,11 @@
         {% endif %}
 
 
+        <script type="text/javascript">
+            var searchAnalysisOptions = {
+                collectQueryUrl: '{{ url('front_search_analysis_collect_query')|e('js') }}'
+            };
+        </script>
         {{ importJavascripts([
             'frontend/plugins/*.js',
             'common/components/escape.js',
@@ -62,6 +67,8 @@
             'frontend/*.js',
             'common/components/*.js',
             'frontend/components/*.js',
+            'frontend/searchAnalysis/options.js',
+            'frontend/searchAnalysis/*.js',
         ]) }}
 
         {% block javascripts_bottom %}{% endblock %}
