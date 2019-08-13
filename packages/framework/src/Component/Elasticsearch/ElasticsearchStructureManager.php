@@ -46,21 +46,21 @@ class ElasticsearchStructureManager
     }
 
     /**
-     * @param int $domainId
+     * @param int|null $domainId
      * @param string $index
      * @return string
      */
-    protected function getVersionedIndexName(int $domainId, string $index): string
+    protected function getVersionedIndexName(?int $domainId, string $index): string
     {
         return $this->indexPrefix . ($this->buildVersion ?? 'null') . $index . $domainId;
     }
 
     /**
-     * @param int $domainId
+     * @param int|null $domainId
      * @param string $index
      * @return string
      */
-    public function getCurrentIndexName(int $domainId, string $index): string
+    public function getCurrentIndexName(?int $domainId, string $index): string
     {
         $aliasName = $this->getAliasName($domainId, $index);
 
@@ -99,20 +99,20 @@ class ElasticsearchStructureManager
     }
 
     /**
-     * @param int $domainId
+     * @param int|null $domainId
      * @param string $index
      * @return string
      */
-    public function getAliasName(int $domainId, string $index): string
+    public function getAliasName(?int $domainId, string $index): string
     {
         return $this->indexPrefix . $index . $domainId;
     }
 
     /**
-     * @param int $domainId
+     * @param int|null $domainId
      * @param string $index
      */
-    public function createIndex(int $domainId, string $index): void
+    public function createIndex(?int $domainId, string $index): void
     {
         $definition = $this->getStructureDefinition($domainId, $index);
         $indexes = $this->client->indices();
@@ -134,10 +134,10 @@ class ElasticsearchStructureManager
     }
 
     /**
-     * @param int $domainId
+     * @param int|null $domainId
      * @param string $index
      */
-    public function migrateIndex(int $domainId, string $index): void
+    public function migrateIndex(?int $domainId, string $index): void
     {
         $this->createIndex($domainId, $index);
         $this->reindexFromCurrentIndexToNewIndex($domainId, $index);
@@ -146,10 +146,10 @@ class ElasticsearchStructureManager
     }
 
     /**
-     * @param int $domainId
+     * @param int|null $domainId
      * @param string $index
      */
-    protected function reindexFromCurrentIndexToNewIndex(int $domainId, string $index): void
+    protected function reindexFromCurrentIndexToNewIndex(?int $domainId, string $index): void
     {
         $indexes = $this->client->indices();
         $indexName = $this->getVersionedIndexName($domainId, $index);
@@ -171,10 +171,10 @@ class ElasticsearchStructureManager
     }
 
     /**
-     * @param int $domainId
+     * @param int|null $domainId
      * @param string $index
      */
-    public function createAliasForIndex(int $domainId, string $index): void
+    public function createAliasForIndex(?int $domainId, string $index): void
     {
         $indexes = $this->client->indices();
         $aliasName = $this->getAliasName($domainId, $index);
@@ -189,10 +189,10 @@ class ElasticsearchStructureManager
     }
 
     /**
-     * @param int $domainId
+     * @param int|null $domainId
      * @param string $index
      */
-    public function deleteCurrentIndex(int $domainId, string $index): void
+    public function deleteCurrentIndex(?int $domainId, string $index): void
     {
         try {
             $indexName = $this->getCurrentIndexName($domainId, $index);
@@ -204,19 +204,23 @@ class ElasticsearchStructureManager
     }
 
     /**
-     * @param int $domainId
+     * @param int|null $domainId
      * @param string $index
      * @return array
      */
-    public function getStructureDefinition(int $domainId, string $index): array
+    public function getStructureDefinition(?int $domainId, string $index): array
     {
-        $file = sprintf('%s/%s/%s.json', $this->definitionDirectory, $index, $domainId);
+        if ($domainId === null) {
+            $file = sprintf('%s/%s.json', $this->definitionDirectory, $index);
+        } else {
+            $file = sprintf('%s/%s/%s.json', $this->definitionDirectory, $index, $domainId);
+        }
         if (!is_file($file)) {
             throw new ElasticsearchStructureException(
                 sprintf(
-                    'Definition file %d.json, for domain ID %1$d, not found in definition folder "%s".' . PHP_EOL . 'Please make sure that for each domain exists a definition json file named by the corresponding domain ID.',
-                    $domainId,
-                    $this->definitionDirectory
+                    'Definition file `%s` was not found.%s',
+                    $file,
+                    $domainId === null ? '' : PHP_EOL . 'Please make sure that for each domain exists a definition json file named by the corresponding domain ID.'
                 )
             );
         }

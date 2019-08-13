@@ -10,7 +10,8 @@ use Shopsys\FrameworkBundle\Component\Elasticsearch\Exception\ElasticsearchStruc
 
 class ElasticsearchStructureManagerTest extends TestCase
 {
-    protected const ELASTICSEARCH_INDEX = 'test-product';
+    protected const ELASTICSEARCH_MULTIDOMAIN_INDEX = 'test-product';
+    protected const ELASTICSEARCH_NON_MULTIDOMAIN_INDEX = 'test-non-multidomain';
 
     /**
      * @var \Shopsys\FrameworkBundle\Component\Elasticsearch\ElasticsearchStructureManager
@@ -36,7 +37,7 @@ class ElasticsearchStructureManagerTest extends TestCase
         $this->structureManager = new ElasticsearchStructureManager('12345', $definitionDirectory, '', $this->client);
     }
 
-    public function testCreateSuccessIndexWithAlias(): void
+    public function testCreateSuccessIndexOnDomainWithAlias(): void
     {
         $expected = [
             'index' => '12345test-product1',
@@ -50,20 +51,39 @@ class ElasticsearchStructureManagerTest extends TestCase
         ];
         $this->indices->expects($this->once())->method('create')->with($expected);
 
-        $this->structureManager->createIndex(1, static::ELASTICSEARCH_INDEX);
-        $this->structureManager->createAliasForIndex(1, static::ELASTICSEARCH_INDEX);
+        $this->structureManager->createIndex(1, static::ELASTICSEARCH_MULTIDOMAIN_INDEX);
+        $this->structureManager->createAliasForIndex(1, static::ELASTICSEARCH_MULTIDOMAIN_INDEX);
+    }
+
+    public function testCreateSuccessIndexWithoutDomainWithAlias(): void
+    {
+        $expected = [
+            'index' => '12345test-non-multidomain',
+            'body' => [
+                'settings' => [
+                    'index' => [
+                        'number_of_shards' => 1,
+                        'number_of_replicas' => 0,
+                    ],
+                ],
+            ],
+        ];
+        $this->indices->expects($this->once())->method('create')->with($expected);
+
+        $this->structureManager->createIndex(null, static::ELASTICSEARCH_NON_MULTIDOMAIN_INDEX);
+        $this->structureManager->createAliasForIndex(null, static::ELASTICSEARCH_NON_MULTIDOMAIN_INDEX);
     }
 
     public function testCreateWhileJsonNotExistsFails(): void
     {
         $this->expectException(ElasticsearchStructureException::class);
-        $this->structureManager->createIndex(3, static::ELASTICSEARCH_INDEX);
+        $this->structureManager->createIndex(3, static::ELASTICSEARCH_MULTIDOMAIN_INDEX);
     }
 
     public function testCreateWhileJsonIsNotValidFails(): void
     {
         $this->expectException(ElasticsearchStructureException::class);
-        $this->structureManager->createIndex(0, static::ELASTICSEARCH_INDEX);
+        $this->structureManager->createIndex(0, static::ELASTICSEARCH_MULTIDOMAIN_INDEX);
     }
 
     public function testDeleteSuccess(): void
@@ -75,7 +95,7 @@ class ElasticsearchStructureManagerTest extends TestCase
         $expectedDelete = ['index' => '12345test-product1'];
         $this->indices->expects($this->once())->method('delete')->with($expectedDelete);
 
-        $this->structureManager->deleteCurrentIndex(1, static::ELASTICSEARCH_INDEX);
+        $this->structureManager->deleteCurrentIndex(1, static::ELASTICSEARCH_MULTIDOMAIN_INDEX);
     }
 
     public function testDeleteNotExisting(): void
@@ -84,6 +104,6 @@ class ElasticsearchStructureManagerTest extends TestCase
 
         $this->indices->expects($this->never())->method('delete');
 
-        $this->structureManager->deleteCurrentIndex(1, static::ELASTICSEARCH_INDEX);
+        $this->structureManager->deleteCurrentIndex(1, static::ELASTICSEARCH_MULTIDOMAIN_INDEX);
     }
 }

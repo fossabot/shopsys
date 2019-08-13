@@ -41,11 +41,11 @@ class ElasticsearchStructureUpdateChecker
     }
 
     /**
-     * @param int $domainId
+     * @param int|null $domainId
      * @param string $index
      * @return bool
      */
-    public function isNecessaryToUpdateStructure(int $domainId, string $index): bool
+    public function isNecessaryToUpdateStructure(?int $domainId, string $index): bool
     {
         $definition = $this->elasticsearchStructureManager->getStructureDefinition($domainId, $index);
 
