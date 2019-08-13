@@ -4,30 +4,30 @@ declare(strict_types=1);
 
 namespace Shopsys\FrameworkBundle\Command;
 
-use Shopsys\FrameworkBundle\Model\Product\Search\Export\ProductSearchExportStructureFacade;
+use Shopsys\FrameworkBundle\Component\Elasticsearch\ElasticsearchStructureFacade;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class ProductSearchMigrateIfNecessaryCommand extends Command
+class ElasticsearchMigrateIfNecessaryCommand extends Command
 {
     /**
      * @var string
      */
-    protected static $defaultName = 'shopsys:product-search:migrate-if-necessary';
+    protected static $defaultName = 'shopsys:elasticsearch:migrate-if-necessary';
 
     /**
-     * @var \Shopsys\FrameworkBundle\Model\Product\Search\Export\ProductSearchExportStructureFacade
+     * @var \Shopsys\FrameworkBundle\Component\Elasticsearch\ElasticsearchStructureFacade
      */
-    protected $productSearchExportStructureFacade;
+    protected $elasticsearchStructureFacade;
 
     /**
-     * @param \Shopsys\FrameworkBundle\Model\Product\Search\Export\ProductSearchExportStructureFacade $productSearchExportStructureFacade
+     * @param \Shopsys\FrameworkBundle\Component\Elasticsearch\ElasticsearchStructureFacade $elasticsearchStructureFacade
      */
-    public function __construct(ProductSearchExportStructureFacade $productSearchExportStructureFacade)
+    public function __construct(ElasticsearchStructureFacade $elasticsearchStructureFacade)
     {
-        $this->productSearchExportStructureFacade = $productSearchExportStructureFacade;
+        $this->elasticsearchStructureFacade = $elasticsearchStructureFacade;
         parent::__construct();
     }
 
@@ -45,7 +45,7 @@ class ProductSearchMigrateIfNecessaryCommand extends Command
     {
         $symfonyStyleIo = new SymfonyStyle($input, $output);
         $output->writeln('Migrating indexes');
-        $this->productSearchExportStructureFacade->migrateIndexesIfNecessary($output);
+        $this->elasticsearchStructureFacade->migrateIndexesIfNecessary($output);
         $symfonyStyleIo->success('Indexes migrated successfully!');
     }
 }

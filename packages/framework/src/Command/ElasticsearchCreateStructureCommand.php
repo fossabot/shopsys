@@ -2,30 +2,30 @@
 
 namespace Shopsys\FrameworkBundle\Command;
 
-use Shopsys\FrameworkBundle\Model\Product\Search\Export\ProductSearchExportStructureFacade;
+use Shopsys\FrameworkBundle\Component\Elasticsearch\ElasticsearchStructureFacade;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class ProductSearchCreateStructureCommand extends Command
+class ElasticsearchCreateStructureCommand extends Command
 {
     /**
      * @var string
      */
-    protected static $defaultName = 'shopsys:product-search:create-structure';
+    protected static $defaultName = 'shopsys:elasticsearch:create-structure';
 
     /**
-     * @var \Shopsys\FrameworkBundle\Model\Product\Search\Export\ProductSearchExportStructureFacade
+     * @var \Shopsys\FrameworkBundle\Component\Elasticsearch\ElasticsearchStructureFacade
      */
-    protected $productSearchExportStructureFacade;
+    protected $elasticsearchStructureFacade;
 
     /**
-     * @param \Shopsys\FrameworkBundle\Model\Product\Search\Export\ProductSearchExportStructureFacade $productSearchExportStructureFacade
+     * @param \Shopsys\FrameworkBundle\Component\Elasticsearch\ElasticsearchStructureFacade $elasticsearchStructureFacade
      */
-    public function __construct(ProductSearchExportStructureFacade $productSearchExportStructureFacade)
+    public function __construct(ElasticsearchStructureFacade $elasticsearchStructureFacade)
     {
-        $this->productSearchExportStructureFacade = $productSearchExportStructureFacade;
+        $this->elasticsearchStructureFacade = $elasticsearchStructureFacade;
         parent::__construct();
     }
 
@@ -43,7 +43,7 @@ class ProductSearchCreateStructureCommand extends Command
     {
         $symfonyStyleIo = new SymfonyStyle($input, $output);
         $output->writeln('Creating structure');
-        $this->productSearchExportStructureFacade->createIndexes($output);
+        $this->elasticsearchStructureFacade->createIndexes($output);
         $symfonyStyleIo->success('Structure created successfully!');
     }
 }

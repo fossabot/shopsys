@@ -141,13 +141,13 @@ Drops all data in the test database and creates a new one with demo data and exp
 
 *Note: All database related targets `db-*` have their `test-db-*` variant for the test database.*
 
-#### product-search-recreate-structure
+#### elasticsearch-recreate-structure
 Recreates Elasticsearch indexes structure.
 Consists of two subtasks that can be run independently:
-* `product-search-delete-structure` - deletes existing indexes structure
-* `product-search-create-structure` - creates new indexes structure by json definitions stored in [the resources directory](/project-base/src/Shopsys/ShopBundle/Resources/definition).
+* `elasticsearch-delete-structure` - deletes existing indexes structure
+* `elasticsearch-create-structure` - creates new indexes structure by json definitions stored in [the resources directory](/project-base/src/Shopsys/ShopBundle/Resources/definition).
 
-#### product-search-migrate-structure
+#### elasticsearch-migrate-structure
 Migrates Elasticsearch indexes if there is change between currently used structure and the one in `*.json`.
 Especially useful when you need to change the structure and don't need to have fresh data in Elasticsearch
 * creates new index without alias

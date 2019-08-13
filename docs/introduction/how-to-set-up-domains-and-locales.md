@@ -83,7 +83,7 @@ If you add a new domain, you need to create an elasticsearch configuration for t
 
 After you create the configuration, you have to create the index in elasticsearch and fill it by products
 ```
-php phing product-search-recreate-structure
+php phing elasticsearch-recreate-structure
 php phing product-search-export-products
 ```
 

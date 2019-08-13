@@ -21,13 +21,13 @@ class ProductSearchExportProductsCommand extends Command
     private $productSearchExportFacade;
 
     /**
-     * @param \Shopsys\FrameworkBundle\Model\Product\Search\Export\ProductSearchExportFacade $productSearchExportFacade
+     * @param \Shopsys\FrameworkBundle\Model\Product\Search\Export\ProductSearchExportFacade $elasticsearchFacade
      */
-    public function __construct(ProductSearchExportFacade $productSearchExportFacade)
+    public function __construct(ProductSearchExportFacade $elasticsearchFacade)
     {
         parent::__construct();
 
-        $this->productSearchExportFacade = $productSearchExportFacade;
+        $this->productSearchExportFacade = $elasticsearchFacade;
     }
 
     protected function configure()

@@ -2,15 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Shopsys\FrameworkBundle\Model\Product\Search\Export;
+namespace Shopsys\FrameworkBundle\Component\Elasticsearch;
 
 use Shopsys\FrameworkBundle\Component\Domain\Domain;
-use Shopsys\FrameworkBundle\Component\Elasticsearch\ElasticsearchStructureManager;
-use Shopsys\FrameworkBundle\Component\Elasticsearch\ElasticsearchStructureUpdateChecker;
 use Shopsys\FrameworkBundle\Model\Product\Search\ProductElasticsearchRepository;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ProductSearchExportStructureFacade
+class ElasticsearchStructureFacade
 {
     /**
      * @var \Shopsys\FrameworkBundle\Component\Domain\Domain

@@ -13,7 +13,7 @@ As a result, found product IDs are returned from Elasticsearch and then the prod
 Elasticsearch [index](https://www.elastic.co/blog/what-is-an-elasticsearch-index) is a logical namespace, you can imagine single index as a single database in terms of relational databases.
 
 The Elasticsearch indexes are created during application build.
-You can also create or delete indexes manually using phing targets `product-search-create-structure`, and `product-search-delete-structure` respectively, or you can use `product-search-recreate-structure` that encapsulates the previous two.
+You can also create or delete indexes manually using phing targets `elasticsearch-create-structure`, and `elasticsearch-delete-structure` respectively, or you can use `elasticsearch-recreate-structure` that encapsulates the previous two.
 
 *Note: More information about what Phing targets are and how they work can be found in [Console Commands for Application Management (Phing Targets)](/docs/introduction/console-commands-for-application-management-phing-targets.md)*
 

@@ -72,23 +72,23 @@
 
     <target name="build" depends="build-deploy-part-1-db-independent,build-deploy-part-2-db-dependent" description="Builds application for production preserving your DB."/>
 
-    <target name="build-demo" depends="wipe,build-version-generate,composer-prod,redis-check,npm,dirs-create,assets,db-demo,grunt,error-pages-generate,warmup,product-search-recreate-structure,product-search-export-products,clean-redis-old" description="Builds application for production with clean demo DB."/>
+    <target name="build-demo" depends="wipe,build-version-generate,composer-prod,redis-check,npm,dirs-create,assets,db-demo,grunt,error-pages-generate,warmup,elasticsearch-recreate-structure,product-search-export-products,clean-redis-old" description="Builds application for production with clean demo DB."/>
 
-    <target name="build-demo-ci" depends="build-version-generate,wipe-excluding-logs,composer-dev,npm,timezones-check,dirs-create,test-dirs-create,assets,db-demo,product-search-recreate-structure,product-search-export-products,grunt,error-pages-generate,tests-acceptance-build,clean-redis-old,checks-ci" description="Builds application for development with clean demo DB and runs CI checks."/>
+    <target name="build-demo-ci" depends="build-version-generate,wipe-excluding-logs,composer-dev,npm,timezones-check,dirs-create,test-dirs-create,assets,db-demo,elasticsearch-recreate-structure,product-search-export-products,grunt,error-pages-generate,tests-acceptance-build,clean-redis-old,checks-ci" description="Builds application for development with clean demo DB and runs CI checks."/>
 
-    <target name="build-demo-dev" depends="build-version-generate,wipe-excluding-logs,composer-dev,npm,timezones-check,dirs-create,test-dirs-create,assets,db-demo,product-search-recreate-structure,product-search-export-products,grunt,error-pages-generate,tests-acceptance-build,clean-redis-old,checks-diff" description="Builds application for development with clean demo DB and runs checks on changed files."/>
+    <target name="build-demo-dev" depends="build-version-generate,wipe-excluding-logs,composer-dev,npm,timezones-check,dirs-create,test-dirs-create,assets,db-demo,elasticsearch-recreate-structure,product-search-export-products,grunt,error-pages-generate,tests-acceptance-build,clean-redis-old,checks-diff" description="Builds application for development with clean demo DB and runs checks on changed files."/>
 
-    <target name="build-demo-dev-quick" depends="build-version-generate,wipe-excluding-logs,composer-dev,npm,dirs-create,test-dirs-create,assets,db-demo,product-search-recreate-structure,product-search-export-products,grunt,clean-redis-old" description="Builds application for development with clean demo DB while skipping nonessential steps."/>
+    <target name="build-demo-dev-quick" depends="build-version-generate,wipe-excluding-logs,composer-dev,npm,dirs-create,test-dirs-create,assets,db-demo,elasticsearch-recreate-structure,product-search-export-products,grunt,clean-redis-old" description="Builds application for development with clean demo DB while skipping nonessential steps."/>
 
     <target name="build-deploy-part-1-db-independent" depends="build-version-generate,clean,composer-prod,npm,dirs-create,assets" description="First part of application build for production preserving your DB (can be run without maintenance page)."/>
 
-    <target name="build-deploy-part-2-db-dependent" depends="product-search-migrate-structure,redis-check,db-migrations,domains-data-create,friendly-urls-generate,domains-urls-replace,grunt,error-pages-generate,warmup,clean-redis-old" description="Second part of application build for production preserving your DB (must be run with maintenance page when containing DB migrations)."/>
+    <target name="build-deploy-part-2-db-dependent" depends="elasticsearch-migrate-structure,redis-check,db-migrations,domains-data-create,friendly-urls-generate,domains-urls-replace,grunt,error-pages-generate,warmup,clean-redis-old" description="Second part of application build for production preserving your DB (must be run with maintenance page when containing DB migrations)."/>
 
-    <target name="build-dev" depends="build-version-generate,clean,composer-dev,npm,timezones-check,dirs-create,test-dirs-create,assets,db-migrations,domains-data-create,friendly-urls-generate,domains-urls-replace,product-search-recreate-structure,product-search-export-products,grunt,error-pages-generate,tests-acceptance-build,clean-redis-old,checks-diff" description="Builds application for development preserving your DB and runs checks on changed files."/>
+    <target name="build-dev" depends="build-version-generate,clean,composer-dev,npm,timezones-check,dirs-create,test-dirs-create,assets,db-migrations,domains-data-create,friendly-urls-generate,domains-urls-replace,elasticsearch-recreate-structure,product-search-export-products,grunt,error-pages-generate,tests-acceptance-build,clean-redis-old,checks-diff" description="Builds application for development preserving your DB and runs checks on changed files."/>
 
-    <target name="build-dev-quick" depends="build-version-generate,clean,composer-dev,npm,dirs-create,test-dirs-create,assets,db-migrations,domains-data-create,friendly-urls-generate,domains-urls-replace,product-search-migrate-structure,grunt,clean-redis-old" description="Builds application for development preserving your DB while skipping nonessential steps."/>
+    <target name="build-dev-quick" depends="build-version-generate,clean,composer-dev,npm,dirs-create,test-dirs-create,assets,db-migrations,domains-data-create,friendly-urls-generate,domains-urls-replace,elasticsearch-migrate-structure,grunt,clean-redis-old" description="Builds application for development preserving your DB while skipping nonessential steps."/>
 
-    <target name="build-new" depends="wipe,build-version-generate,composer-prod,redis-check,npm,dirs-create,assets,db-rebuild,grunt,error-pages-generate,warmup,product-search-recreate-structure,clean-redis-old" description="Builds application for production with clean DB (with base data only)."/>
+    <target name="build-new" depends="wipe,build-version-generate,composer-prod,redis-check,npm,dirs-create,assets,db-rebuild,grunt,error-pages-generate,warmup,elasticsearch-recreate-structure,clean-redis-old" description="Builds application for production with clean DB (with base data only)."/>
 
     <target name="build-version-generate" description="Generates parameters_version.yml config file with a new build version number.">
         <exec executable="${path.php.executable}" checkreturn="true" outputProperty="version">
@@ -106,7 +106,7 @@
 
     <target name="checks" depends="checks-internal,standards,tests" description="Runs internal checks, coding standards and runs unit, DB and smoke tests."/>
 
-    <target name="checks-ci" depends="checks-internal,test-db-demo,test-product-search-recreate-structure,test-product-search-export-products,tests-functional,tests-smoke,tests-acceptance" description="Runs internal checks and runs DB, smoke and acceptance tests."/>
+    <target name="checks-ci" depends="checks-internal,test-db-demo,test-elasticsearch-recreate-structure,test-product-search-export-products,tests-functional,tests-smoke,tests-acceptance" description="Runs internal checks and runs DB, smoke and acceptance tests."/>
 
     <target name="checks-diff" depends="checks-internal,standards-diff,tests" description="Runs internal checks, coding standards on changed files and runs unit, DB and smoke tests."/>
 
@@ -488,6 +488,29 @@
         </exec>
     </target>
 
+    <target name="elasticsearch-create-structure" description="Creates structure for searching via elasticsearch." hidden="true">
+        <exec executable="${path.php.executable}" passthru="true" checkreturn="true">
+            <arg value="${path.bin-console}"/>
+            <arg value="shopsys:elasticsearch:create-structure"/>
+        </exec>
+    </target>
+
+    <target name="elasticsearch-delete-structure" description="Deletes structure for searching via elasticsearch." hidden="true">
+        <exec executable="${path.php.executable}" passthru="true" checkreturn="true">
+            <arg value="${path.bin-console}"/>
+            <arg value="shopsys:elasticsearch:delete-structure"/>
+        </exec>
+    </target>
+
+    <target name="elasticsearch-migrate-structure" description="Creates new structure, reindexes it from old one, deletes old structure and add alias to new structure.">
+        <exec executable="${path.php.executable}" passthru="true" checkreturn="true">
+            <arg value="${path.bin-console}"/>
+            <arg value="shopsys:elasticsearch:migrate-if-necessary"/>
+        </exec>
+    </target>
+
+    <target name="elasticsearch-recreate-structure" depends="elasticsearch-delete-structure,elasticsearch-create-structure" description="Recreates structure for searching via elasticsearch (deletes existing structure and creates new one)"/>
+
     <target name="error-pages-generate" depends="prod-warmup,redis-check" description="Generates error pages displayed in production environment.">
         <exec executable="${path.php.executable}" passthru="true" checkreturn="true">
             <arg value="${path.bin-console}"/>
@@ -649,35 +672,12 @@
         </exec>
     </target>
 
-    <target name="product-search-create-structure" description="Creates structure for searching via elasticsearch." hidden="true">
-        <exec executable="${path.php.executable}" passthru="true" checkreturn="true">
-            <arg value="${path.bin-console}"/>
-            <arg value="shopsys:product-search:create-structure"/>
-        </exec>
-    </target>
-
-    <target name="product-search-delete-structure" description="Deletes structure for searching via elasticsearch." hidden="true">
-        <exec executable="${path.php.executable}" passthru="true" checkreturn="true">
-            <arg value="${path.bin-console}"/>
-            <arg value="shopsys:product-search:delete-structure"/>
-        </exec>
-    </target>
-
     <target name="product-search-export-products" description="Exports all products for searching via elasticsearch.">
         <exec executable="${path.php.executable}" passthru="true" checkreturn="true">
             <arg value="${path.bin-console}"/>
             <arg value="shopsys:product-search:export-products"/>
         </exec>
     </target>
-
-    <target name="product-search-migrate-structure" description="Creates new structure, reindexes it from old one, deletes old structure and add alias to new structure.">
-        <exec executable="${path.php.executable}" passthru="true" checkreturn="true">
-            <arg value="${path.bin-console}"/>
-            <arg value="shopsys:product-search:migrate-if-necessary"/>
-        </exec>
-    </target>
-
-    <target name="product-search-recreate-structure" depends="product-search-delete-structure,product-search-create-structure" description="Recreates structure for searching via elasticsearch (deletes existing structure and creates new one)"/>
 
     <target name="redis-check" description="Checks availability of Redis" hidden="true">
         <exec executable="${path.php.executable}" passthru="true" checkreturn="true">
@@ -819,6 +819,24 @@
         </exec>
     </target>
 
+    <target name="test-elasticsearch-create-structure" description="Creates structure for searching via elasticsearch for test environment." hidden="true">
+        <exec executable="${path.php.executable}" passthru="true" checkreturn="true">
+            <arg value="${path.bin-console}"/>
+            <arg value="--env=test"/>
+            <arg value="shopsys:elasticsearch:create-structure"/>
+        </exec>
+    </target>
+
+    <target name="test-elasticsearch-delete-structure" description="Deletes structure for searching via elasticsearch for test environment." hidden="true">
+        <exec executable="${path.php.executable}" passthru="true" checkreturn="true">
+            <arg value="${path.bin-console}"/>
+            <arg value="--env=test"/>
+            <arg value="shopsys:elasticsearch:delete-structure"/>
+        </exec>
+    </target>
+
+    <target name="test-elasticsearch-recreate-structure" depends="test-elasticsearch-delete-structure,test-elasticsearch-create-structure" description="Recreates structure for searching via elasticsearch in test environment (deletes existing structure and creates new one)"/>
+
     <target name="test-friendly-urls-generate" description="Generates friendly urls for supported entities when missing in test DB." hidden="true">
         <exec executable="${path.php.executable}" passthru="true" checkreturn="true">
             <arg value="${path.bin-console}"/>
@@ -835,22 +853,6 @@
         </exec>
     </target>
 
-    <target name="test-product-search-create-structure" description="Creates structure for searching via elasticsearch for test environment." hidden="true">
-        <exec executable="${path.php.executable}" passthru="true" checkreturn="true">
-            <arg value="${path.bin-console}"/>
-            <arg value="--env=test"/>
-            <arg value="shopsys:product-search:create-structure"/>
-        </exec>
-    </target>
-
-    <target name="test-product-search-delete-structure" description="Deletes structure for searching via elasticsearch for test environment." hidden="true">
-        <exec executable="${path.php.executable}" passthru="true" checkreturn="true">
-            <arg value="${path.bin-console}"/>
-            <arg value="--env=test"/>
-            <arg value="shopsys:product-search:delete-structure"/>
-        </exec>
-    </target>
-
     <target name="test-product-search-export-products" description="Exports all products for searching via elasticsearch for test environment.">
         <exec executable="${path.php.executable}" passthru="true" checkreturn="true">
             <arg value="${path.bin-console}"/>
@@ -859,9 +861,7 @@
         </exec>
     </target>
 
-    <target name="test-product-search-recreate-structure" depends="test-product-search-delete-structure,test-product-search-create-structure" description="Recreates structure for searching via elasticsearch in test environment (deletes existing structure and creates new one)"/>
-
-    <target name="tests" depends="test-db-demo,test-product-search-recreate-structure,test-product-search-export-products,tests-unit,tests-functional,tests-smoke" description="Runs unit, functional and smoke tests. Builds new test database in the process."/>
+    <target name="tests" depends="test-db-demo,test-elasticsearch-recreate-structure,test-product-search-export-products,tests-unit,tests-functional,tests-smoke" description="Runs unit, functional and smoke tests. Builds new test database in the process."/>
 
     <target name="tests-acceptance" depends="clean,clean-redis,test-db-dump" description="Runs acceptance tests. Running Selenium server is required (Selenium is always running in Docker setup).">
         <available file="${path.env.test}" type="file" property="path.env.test.existed"/>
@@ -941,7 +941,7 @@
         </exec>
     </target>
 
-    <target name="tests-performance-run" depends="clean,clean-redis,test-db-performance,test-product-search-recreate-structure,test-product-search-export-products,tests-performance-warmup,tests-performance" description="Runs performance tests. Builds new test database with performance data in the process."/>
+    <target name="tests-performance-run" depends="clean,clean-redis,test-db-performance,test-elasticsearch-recreate-structure,test-product-search-export-products,tests-performance-warmup,tests-performance" description="Runs performance tests. Builds new test database with performance data in the process."/>
 
     <target name="tests-performance-warmup" description="Warms up cache for performance tests.">
         <exec executable="${path.phpunit.executable}" logoutput="true" passthru="true" checkreturn="true">
