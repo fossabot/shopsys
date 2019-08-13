@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shopsys\FrameworkBundle\Component\Elasticsearch;
 
 use Elasticsearch\Client;
@@ -110,7 +112,7 @@ class ElasticsearchStructureManager
      * @param int $domainId
      * @param string $index
      */
-    public function createIndex(int $domainId, string $index)
+    public function createIndex(int $domainId, string $index): void
     {
         $definition = $this->getStructureDefinition($domainId, $index);
         $indexes = $this->client->indices();
@@ -135,7 +137,7 @@ class ElasticsearchStructureManager
      * @param int $domainId
      * @param string $index
      */
-    public function migrateIndex(int $domainId, string $index)
+    public function migrateIndex(int $domainId, string $index): void
     {
         $this->createIndex($domainId, $index);
         $this->reindexFromCurrentIndexToNewIndex($domainId, $index);
@@ -147,7 +149,7 @@ class ElasticsearchStructureManager
      * @param int $domainId
      * @param string $index
      */
-    protected function reindexFromCurrentIndexToNewIndex(int $domainId, string $index)
+    protected function reindexFromCurrentIndexToNewIndex(int $domainId, string $index): void
     {
         $indexes = $this->client->indices();
         $indexName = $this->getVersionedIndexName($domainId, $index);
@@ -172,7 +174,7 @@ class ElasticsearchStructureManager
      * @param int $domainId
      * @param string $index
      */
-    public function createAliasForIndex(int $domainId, string $index)
+    public function createAliasForIndex(int $domainId, string $index): void
     {
         $indexes = $this->client->indices();
         $aliasName = $this->getAliasName($domainId, $index);
@@ -220,7 +222,7 @@ class ElasticsearchStructureManager
         }
         $json = file_get_contents($file);
 
-        $definition = json_decode($json, JSON_OBJECT_AS_ARRAY);
+        $definition = json_decode($json, true);
         if ($definition === null) {
             throw new ElasticsearchStructureException(sprintf('Invalid JSON format in file %s', $file));
         }
