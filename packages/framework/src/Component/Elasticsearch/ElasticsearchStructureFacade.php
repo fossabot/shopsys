@@ -43,7 +43,7 @@ class ElasticsearchStructureFacade
     /**
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
-    public function migrateIndexesIfNecessary(OutputInterface $output)
+    public function migrateIndexesIfNecessary(OutputInterface $output): void
     {
         foreach ($this->domain->getAllIds() as $domainId) {
             $output->writeln(sprintf('Migrating index for domain with ID %s', $domainId));
@@ -62,7 +62,7 @@ class ElasticsearchStructureFacade
     /**
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
-    public function createIndexes(OutputInterface $output)
+    public function createIndexes(OutputInterface $output): void
     {
         foreach ($this->domain->getAllIds() as $domainId) {
             $this->createIndexIfNecessary($output, $domainId);
@@ -74,7 +74,7 @@ class ElasticsearchStructureFacade
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @param int $domainId
      */
-    protected function createAlias(OutputInterface $output, int $domainId)
+    protected function createAlias(OutputInterface $output, int $domainId): void
     {
         $output->writeln(sprintf('Creating alias for domain with ID %s', $domainId));
 
@@ -88,7 +88,7 @@ class ElasticsearchStructureFacade
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @param int $domainId
      */
-    protected function createIndexIfNecessary(OutputInterface $output, int $domainId)
+    protected function createIndexIfNecessary(OutputInterface $output, int $domainId): void
     {
         $output->writeln(sprintf('Creating index for domain with ID %s', $domainId));
 
@@ -104,7 +104,7 @@ class ElasticsearchStructureFacade
     /**
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
-    public function deleteIndexes(OutputInterface $output)
+    public function deleteIndexes(OutputInterface $output): void
     {
         foreach ($this->domain->getAllIds() as $domainId) {
             $output->writeln(sprintf('Deleting index for domain with ID %s', $domainId));
