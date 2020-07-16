@@ -9,12 +9,12 @@ class AdditionalImageData
     /**
      * @var string
      */
-    public $media;
+    protected $media;
 
     /**
      * @var string
      */
-    public $url;
+    protected $url;
 
     /**
      * @param string $media
@@ -24,5 +24,21 @@ class AdditionalImageData
     {
         $this->media = $media;
         $this->url = $url;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMedia(): string
+    {
+        return $this->media;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl(): string
+    {
+        return $this->url;
     }
 }
