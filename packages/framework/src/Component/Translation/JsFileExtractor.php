@@ -16,11 +16,6 @@ class JsFileExtractor implements FileVisitorInterface
     protected const DEFAULT_MESSAGE_DOMAIN = 'messages';
 
     /**
-     * @var \JMS\TranslationBundle\Model\MessageCatalogue
-     */
-    protected $catalogue;
-
-    /**
      * @param \SplFileInfo $file
      * @param \JMS\TranslationBundle\Model\MessageCatalogue $catalogue
      */
