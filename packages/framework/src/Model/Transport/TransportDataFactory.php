@@ -10,11 +10,6 @@ use Shopsys\FrameworkBundle\Model\Pricing\Vat\VatFacade;
 class TransportDataFactory implements TransportDataFactoryInterface
 {
     /**
-     * @var \Shopsys\FrameworkBundle\Model\Transport\TransportFacade
-     */
-    protected $transportFacade;
-
-    /**
      * @var \Shopsys\FrameworkBundle\Model\Pricing\Vat\VatFacade
      */
     protected $vatFacade;
@@ -30,18 +25,15 @@ class TransportDataFactory implements TransportDataFactoryInterface
     protected $imageFacade;
 
     /**
-     * @param \Shopsys\FrameworkBundle\Model\Transport\TransportFacade $transportFacade
      * @param \Shopsys\FrameworkBundle\Model\Pricing\Vat\VatFacade $vatFacade
      * @param \Shopsys\FrameworkBundle\Component\Domain\Domain $domain
      * @param \Shopsys\FrameworkBundle\Component\Image\ImageFacade $imageFacade
      */
     public function __construct(
-        TransportFacade $transportFacade,
         VatFacade $vatFacade,
         Domain $domain,
         ImageFacade $imageFacade
     ) {
-        $this->transportFacade = $transportFacade;
         $this->vatFacade = $vatFacade;
         $this->domain = $domain;
         $this->imageFacade = $imageFacade;

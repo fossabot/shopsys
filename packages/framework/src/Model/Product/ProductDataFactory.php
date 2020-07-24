@@ -6,7 +6,6 @@ use BadMethodCallException;
 use Shopsys\FrameworkBundle\Component\Domain\Domain;
 use Shopsys\FrameworkBundle\Component\Image\ImageFacade;
 use Shopsys\FrameworkBundle\Component\Plugin\PluginCrudExtensionFacade;
-use Shopsys\FrameworkBundle\Component\Router\FriendlyUrl\FriendlyUrlFacade;
 use Shopsys\FrameworkBundle\Model\Pricing\Group\PricingGroupFacade;
 use Shopsys\FrameworkBundle\Model\Pricing\Vat\VatFacade;
 use Shopsys\FrameworkBundle\Model\Product\Accessory\ProductAccessoryRepository;
@@ -39,19 +38,9 @@ class ProductDataFactory implements ProductDataFactoryInterface
     protected $domain;
 
     /**
-     * @var \Shopsys\FrameworkBundle\Model\Product\ProductRepository
-     */
-    protected $productRepository;
-
-    /**
      * @var \Shopsys\FrameworkBundle\Model\Product\Parameter\ParameterRepository
      */
     protected $parameterRepository;
-
-    /**
-     * @var \Shopsys\FrameworkBundle\Component\Router\FriendlyUrl\FriendlyUrlFacade
-     */
-    protected $friendlyUrlFacade;
 
     /**
      * @var \Shopsys\FrameworkBundle\Model\Product\Accessory\ProductAccessoryRepository
@@ -88,9 +77,7 @@ class ProductDataFactory implements ProductDataFactoryInterface
      * @param \Shopsys\FrameworkBundle\Model\Product\Pricing\ProductInputPriceFacade $productInputPriceFacade
      * @param \Shopsys\FrameworkBundle\Model\Product\Unit\UnitFacade $unitFacade
      * @param \Shopsys\FrameworkBundle\Component\Domain\Domain $domain
-     * @param \Shopsys\FrameworkBundle\Model\Product\ProductRepository $productRepository
      * @param \Shopsys\FrameworkBundle\Model\Product\Parameter\ParameterRepository $parameterRepository
-     * @param \Shopsys\FrameworkBundle\Component\Router\FriendlyUrl\FriendlyUrlFacade $friendlyUrlFacade
      * @param \Shopsys\FrameworkBundle\Model\Product\Accessory\ProductAccessoryRepository $productAccessoryRepository
      * @param \Shopsys\FrameworkBundle\Component\Image\ImageFacade $imageFacade
      * @param \Shopsys\FrameworkBundle\Component\Plugin\PluginCrudExtensionFacade $pluginDataFormExtensionFacade
@@ -103,9 +90,7 @@ class ProductDataFactory implements ProductDataFactoryInterface
         ProductInputPriceFacade $productInputPriceFacade,
         UnitFacade $unitFacade,
         Domain $domain,
-        ProductRepository $productRepository,
         ParameterRepository $parameterRepository,
-        FriendlyUrlFacade $friendlyUrlFacade,
         ProductAccessoryRepository $productAccessoryRepository,
         ImageFacade $imageFacade,
         PluginCrudExtensionFacade $pluginDataFormExtensionFacade,
@@ -117,9 +102,7 @@ class ProductDataFactory implements ProductDataFactoryInterface
         $this->productInputPriceFacade = $productInputPriceFacade;
         $this->unitFacade = $unitFacade;
         $this->domain = $domain;
-        $this->productRepository = $productRepository;
         $this->parameterRepository = $parameterRepository;
-        $this->friendlyUrlFacade = $friendlyUrlFacade;
         $this->productAccessoryRepository = $productAccessoryRepository;
         $this->imageFacade = $imageFacade;
         $this->pluginDataFormExtensionFacade = $pluginDataFormExtensionFacade;

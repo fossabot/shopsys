@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Shopsys\FrameworkBundle\Twig;
 
 use CommerceGuys\Intl\Currency\CurrencyRepositoryInterface;
-use CommerceGuys\Intl\NumberFormat\NumberFormatRepositoryInterface;
 use Shopsys\FrameworkBundle\Component\CurrencyFormatter\CurrencyFormatterFactory;
 use Shopsys\FrameworkBundle\Component\Domain\Domain;
 use Shopsys\FrameworkBundle\Component\Money\Money;
@@ -34,11 +33,6 @@ class PriceExtension extends AbstractExtension
     protected $localization;
 
     /**
-     * @var \CommerceGuys\Intl\NumberFormat\NumberFormatRepositoryInterface
-     */
-    protected $numberFormatRepository;
-
-    /**
      * @var \CommerceGuys\Intl\Currency\CurrencyRepositoryInterface
      */
     protected $intlCurrencyRepository;
@@ -52,7 +46,6 @@ class PriceExtension extends AbstractExtension
      * @param \Shopsys\FrameworkBundle\Model\Pricing\Currency\CurrencyFacade $currencyFacade
      * @param \Shopsys\FrameworkBundle\Component\Domain\Domain $domain
      * @param \Shopsys\FrameworkBundle\Model\Localization\Localization $localization
-     * @param \CommerceGuys\Intl\NumberFormat\NumberFormatRepositoryInterface $numberFormatRepository
      * @param \CommerceGuys\Intl\Currency\CurrencyRepositoryInterface $intlCurrencyRepository
      * @param \Shopsys\FrameworkBundle\Component\CurrencyFormatter\CurrencyFormatterFactory $currencyFormatterFactory
      */
@@ -60,14 +53,12 @@ class PriceExtension extends AbstractExtension
         CurrencyFacade $currencyFacade,
         Domain $domain,
         Localization $localization,
-        NumberFormatRepositoryInterface $numberFormatRepository,
         CurrencyRepositoryInterface $intlCurrencyRepository,
         CurrencyFormatterFactory $currencyFormatterFactory
     ) {
         $this->currencyFacade = $currencyFacade;
         $this->domain = $domain;
         $this->localization = $localization;
-        $this->numberFormatRepository = $numberFormatRepository;
         $this->intlCurrencyRepository = $intlCurrencyRepository;
         $this->currencyFormatterFactory = $currencyFormatterFactory;
     }

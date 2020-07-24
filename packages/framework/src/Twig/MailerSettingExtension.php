@@ -10,11 +10,6 @@ use Twig\TwigFunction;
 class MailerSettingExtension extends AbstractExtension
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    protected $container;
-
-    /**
      * @var bool
      */
     protected $isDeliveryDisabled;
@@ -40,10 +35,9 @@ class MailerSettingExtension extends AbstractExtension
      */
     public function __construct(ContainerInterface $container, Environment $twigEnvironment)
     {
-        $this->container = $container;
-        $this->isDeliveryDisabled = $this->container->getParameter('mailer_disable_delivery');
-        $this->mailerMasterEmailAddress = $this->container->getParameter('mailer_master_email_address');
-        $this->mailerWhitelistExpressions = $this->container->getParameter('mailer_delivery_whitelist');
+        $this->isDeliveryDisabled = $container->getParameter('mailer_disable_delivery');
+        $this->mailerMasterEmailAddress = $container->getParameter('mailer_master_email_address');
+        $this->mailerWhitelistExpressions = $container->getParameter('mailer_delivery_whitelist');
         $this->twigEnvironment = $twigEnvironment;
     }
 

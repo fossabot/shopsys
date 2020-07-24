@@ -5,13 +5,8 @@ namespace Shopsys\FrameworkBundle\Model\Pricing\Currency;
 use Doctrine\ORM\EntityManagerInterface;
 use Shopsys\FrameworkBundle\Component\Domain\Domain;
 use Shopsys\FrameworkBundle\Model\Order\OrderRepository;
-use Shopsys\FrameworkBundle\Model\Payment\PaymentPriceFactoryInterface;
-use Shopsys\FrameworkBundle\Model\Payment\PaymentRepository;
 use Shopsys\FrameworkBundle\Model\Pricing\PricingSetting;
-use Shopsys\FrameworkBundle\Model\Pricing\Vat\VatFacade;
 use Shopsys\FrameworkBundle\Model\Product\Pricing\ProductPriceRecalculationScheduler;
-use Shopsys\FrameworkBundle\Model\Transport\TransportPriceFactoryInterface;
-use Shopsys\FrameworkBundle\Model\Transport\TransportRepository;
 
 class CurrencyFacade
 {
@@ -46,34 +41,9 @@ class CurrencyFacade
     protected $productPriceRecalculationScheduler;
 
     /**
-     * @var \Shopsys\FrameworkBundle\Model\Payment\PaymentRepository
-     */
-    protected $paymentRepository;
-
-    /**
-     * @var \Shopsys\FrameworkBundle\Model\Transport\TransportRepository
-     */
-    protected $transportRepository;
-
-    /**
-     * @var \Shopsys\FrameworkBundle\Model\Payment\PaymentPriceFactoryInterface
-     */
-    protected $paymentPriceFactory;
-
-    /**
-     * @var \Shopsys\FrameworkBundle\Model\Transport\TransportPriceFactoryInterface
-     */
-    protected $transportPriceFactory;
-
-    /**
      * @var \Shopsys\FrameworkBundle\Model\Pricing\Currency\CurrencyFactoryInterface
      */
     protected $currencyFactory;
-
-    /**
-     * @var \Shopsys\FrameworkBundle\Model\Pricing\Vat\VatFacade
-     */
-    protected $vatFacade;
 
     /**
      * @param \Doctrine\ORM\EntityManagerInterface $em
@@ -82,12 +52,7 @@ class CurrencyFacade
      * @param \Shopsys\FrameworkBundle\Model\Order\OrderRepository $orderRepository
      * @param \Shopsys\FrameworkBundle\Component\Domain\Domain $domain
      * @param \Shopsys\FrameworkBundle\Model\Product\Pricing\ProductPriceRecalculationScheduler $productPriceRecalculationScheduler
-     * @param \Shopsys\FrameworkBundle\Model\Payment\PaymentRepository $paymentRepository
-     * @param \Shopsys\FrameworkBundle\Model\Transport\TransportRepository $transportRepository
-     * @param \Shopsys\FrameworkBundle\Model\Payment\PaymentPriceFactoryInterface $paymentPriceFactory
-     * @param \Shopsys\FrameworkBundle\Model\Transport\TransportPriceFactoryInterface $transportPriceFactory
      * @param \Shopsys\FrameworkBundle\Model\Pricing\Currency\CurrencyFactoryInterface $currencyFactory
-     * @param \Shopsys\FrameworkBundle\Model\Pricing\Vat\VatFacade $vatFacade
      */
     public function __construct(
         EntityManagerInterface $em,
@@ -96,12 +61,7 @@ class CurrencyFacade
         OrderRepository $orderRepository,
         Domain $domain,
         ProductPriceRecalculationScheduler $productPriceRecalculationScheduler,
-        PaymentRepository $paymentRepository,
-        TransportRepository $transportRepository,
-        PaymentPriceFactoryInterface $paymentPriceFactory,
-        TransportPriceFactoryInterface $transportPriceFactory,
-        CurrencyFactoryInterface $currencyFactory,
-        VatFacade $vatFacade
+        CurrencyFactoryInterface $currencyFactory
     ) {
         $this->em = $em;
         $this->currencyRepository = $currencyRepository;
@@ -109,12 +69,7 @@ class CurrencyFacade
         $this->orderRepository = $orderRepository;
         $this->domain = $domain;
         $this->productPriceRecalculationScheduler = $productPriceRecalculationScheduler;
-        $this->paymentRepository = $paymentRepository;
-        $this->transportRepository = $transportRepository;
-        $this->paymentPriceFactory = $paymentPriceFactory;
-        $this->transportPriceFactory = $transportPriceFactory;
         $this->currencyFactory = $currencyFactory;
-        $this->vatFacade = $vatFacade;
     }
 
     /**

@@ -7,7 +7,6 @@ namespace Shopsys\FrameworkBundle\Model\Product\Elasticsearch;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
-use Shopsys\FrameworkBundle\Component\Domain\Domain;
 use Shopsys\FrameworkBundle\Component\Paginator\QueryPaginator;
 use Shopsys\FrameworkBundle\Component\Router\FriendlyUrl\FriendlyUrlFacade;
 use Shopsys\FrameworkBundle\Component\Router\FriendlyUrl\FriendlyUrlRepository;
@@ -41,11 +40,6 @@ class ProductExportRepository
     protected $friendlyUrlRepository;
 
     /**
-     * @var \Shopsys\FrameworkBundle\Component\Domain\Domain
-     */
-    protected $domain;
-
-    /**
      * @var \Shopsys\FrameworkBundle\Model\Product\ProductVisibilityRepository
      */
     protected $productVisibilityRepository;
@@ -60,7 +54,6 @@ class ProductExportRepository
      * @param \Shopsys\FrameworkBundle\Model\Product\Parameter\ParameterRepository $parameterRepository
      * @param \Shopsys\FrameworkBundle\Model\Product\ProductFacade $productFacade
      * @param \Shopsys\FrameworkBundle\Component\Router\FriendlyUrl\FriendlyUrlRepository $friendlyUrlRepository
-     * @param \Shopsys\FrameworkBundle\Component\Domain\Domain $domain
      * @param \Shopsys\FrameworkBundle\Model\Product\ProductVisibilityRepository $productVisibilityRepository
      * @param \Shopsys\FrameworkBundle\Component\Router\FriendlyUrl\FriendlyUrlFacade $friendlyUrlFacade
      */
@@ -69,7 +62,6 @@ class ProductExportRepository
         ParameterRepository $parameterRepository,
         ProductFacade $productFacade,
         FriendlyUrlRepository $friendlyUrlRepository,
-        Domain $domain,
         ProductVisibilityRepository $productVisibilityRepository,
         FriendlyUrlFacade $friendlyUrlFacade
     ) {
@@ -77,7 +69,6 @@ class ProductExportRepository
         $this->productFacade = $productFacade;
         $this->em = $em;
         $this->friendlyUrlRepository = $friendlyUrlRepository;
-        $this->domain = $domain;
         $this->productVisibilityRepository = $productVisibilityRepository;
         $this->friendlyUrlFacade = $friendlyUrlFacade;
     }

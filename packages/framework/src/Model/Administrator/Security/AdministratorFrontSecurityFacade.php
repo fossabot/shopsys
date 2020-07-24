@@ -7,7 +7,6 @@ use Shopsys\FrameworkBundle\Model\Security\Roles;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class AdministratorFrontSecurityFacade
@@ -31,26 +30,18 @@ class AdministratorFrontSecurityFacade
     protected $accessDecisionManager;
 
     /**
-     * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface
-     */
-    protected $authorizationChecker;
-
-    /**
      * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
      * @param \Shopsys\FrameworkBundle\Model\Administrator\Security\AdministratorUserProvider $administratorUserProvider
      * @param \Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface $accessDecisionManager
-     * @param \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface $authorizationChecker
      */
     public function __construct(
         SessionInterface $session,
         AdministratorUserProvider $administratorUserProvider,
-        AccessDecisionManagerInterface $accessDecisionManager,
-        AuthorizationCheckerInterface $authorizationChecker
+        AccessDecisionManagerInterface $accessDecisionManager
     ) {
         $this->session = $session;
         $this->administratorUserProvider = $administratorUserProvider;
         $this->accessDecisionManager = $accessDecisionManager;
-        $this->authorizationChecker = $authorizationChecker;
     }
 
     /**

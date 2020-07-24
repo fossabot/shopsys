@@ -3,7 +3,6 @@
 namespace Shopsys\FrameworkBundle\Model\Product\Collection;
 
 use Shopsys\FrameworkBundle\Component\Domain\Config\DomainConfig;
-use Shopsys\FrameworkBundle\Component\Domain\Domain;
 use Shopsys\FrameworkBundle\Component\Image\Config\ImageConfig;
 use Shopsys\FrameworkBundle\Component\Image\ImageFacade;
 use Shopsys\FrameworkBundle\Component\Image\ImageRepository;
@@ -11,15 +10,9 @@ use Shopsys\FrameworkBundle\Component\Router\FriendlyUrl\FriendlyUrlFacade;
 use Shopsys\FrameworkBundle\Component\Router\FriendlyUrl\FriendlyUrlRepository;
 use Shopsys\FrameworkBundle\Model\Product\Parameter\ParameterRepository;
 use Shopsys\FrameworkBundle\Model\Product\Product;
-use Shopsys\FrameworkBundle\Model\Product\ProductRepository;
 
 class ProductCollectionFacade
 {
-    /**
-     * @var \Shopsys\FrameworkBundle\Model\Product\ProductRepository
-     */
-    protected $productRepository;
-
     /**
      * @var \Shopsys\FrameworkBundle\Component\Image\Config\ImageConfig
      */
@@ -46,42 +39,31 @@ class ProductCollectionFacade
     protected $parameterRepository;
 
     /**
-     * @var \Shopsys\FrameworkBundle\Component\Domain\Domain
-     */
-    protected $domain;
-
-    /**
      * @var \Shopsys\FrameworkBundle\Component\Router\FriendlyUrl\FriendlyUrlFacade
      */
     protected $friendlyUrlFacade;
 
     /**
-     * @param \Shopsys\FrameworkBundle\Model\Product\ProductRepository $productRepository
      * @param \Shopsys\FrameworkBundle\Component\Image\Config\ImageConfig $imageConfig
      * @param \Shopsys\FrameworkBundle\Component\Image\ImageRepository $imageRepository
      * @param \Shopsys\FrameworkBundle\Component\Image\ImageFacade $imageFacade
      * @param \Shopsys\FrameworkBundle\Component\Router\FriendlyUrl\FriendlyUrlRepository $friendlyUrlRepository
      * @param \Shopsys\FrameworkBundle\Model\Product\Parameter\ParameterRepository $parameterRepository
-     * @param \Shopsys\FrameworkBundle\Component\Domain\Domain $domain
      * @param \Shopsys\FrameworkBundle\Component\Router\FriendlyUrl\FriendlyUrlFacade $friendlyUrlFacade
      */
     public function __construct(
-        ProductRepository $productRepository,
         ImageConfig $imageConfig,
         ImageRepository $imageRepository,
         ImageFacade $imageFacade,
         FriendlyUrlRepository $friendlyUrlRepository,
         ParameterRepository $parameterRepository,
-        Domain $domain,
         FriendlyUrlFacade $friendlyUrlFacade
     ) {
         $this->imageConfig = $imageConfig;
         $this->imageRepository = $imageRepository;
         $this->imageFacade = $imageFacade;
         $this->friendlyUrlRepository = $friendlyUrlRepository;
-        $this->productRepository = $productRepository;
         $this->parameterRepository = $parameterRepository;
-        $this->domain = $domain;
         $this->friendlyUrlFacade = $friendlyUrlFacade;
     }
 

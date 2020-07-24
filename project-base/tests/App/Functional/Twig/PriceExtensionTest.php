@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\App\Functional\Twig;
 
-use CommerceGuys\Intl\NumberFormat\NumberFormatRepository;
 use Shopsys\FrameworkBundle\Component\Domain\Config\DomainConfig;
 use Shopsys\FrameworkBundle\Component\Domain\Domain;
 use Shopsys\FrameworkBundle\Component\Money\Money;
@@ -161,7 +160,6 @@ class PriceExtensionTest extends FunctionalTestCase
             $currencyFacadeMock,
             $this->domain,
             $localization,
-            new NumberFormatRepository(),
             $this->intlCurrencyRepository,
             $this->currencyFormatterFactory
         );

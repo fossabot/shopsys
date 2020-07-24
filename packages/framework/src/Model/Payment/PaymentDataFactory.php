@@ -10,11 +10,6 @@ use Shopsys\FrameworkBundle\Model\Pricing\Vat\VatFacade;
 class PaymentDataFactory implements PaymentDataFactoryInterface
 {
     /**
-     * @var \Shopsys\FrameworkBundle\Model\Payment\PaymentFacade
-     */
-    protected $paymentFacade;
-
-    /**
      * @var \Shopsys\FrameworkBundle\Model\Pricing\Vat\VatFacade
      */
     protected $vatFacade;
@@ -30,18 +25,15 @@ class PaymentDataFactory implements PaymentDataFactoryInterface
     protected $imageFacade;
 
     /**
-     * @param \Shopsys\FrameworkBundle\Model\Payment\PaymentFacade $paymentFacade
      * @param \Shopsys\FrameworkBundle\Model\Pricing\Vat\VatFacade $vatFacade
      * @param \Shopsys\FrameworkBundle\Component\Domain\Domain $domain
      * @param \Shopsys\FrameworkBundle\Component\Image\ImageFacade $imageFacade
      */
     public function __construct(
-        PaymentFacade $paymentFacade,
         VatFacade $vatFacade,
         Domain $domain,
         ImageFacade $imageFacade
     ) {
-        $this->paymentFacade = $paymentFacade;
         $this->vatFacade = $vatFacade;
         $this->domain = $domain;
         $this->imageFacade = $imageFacade;

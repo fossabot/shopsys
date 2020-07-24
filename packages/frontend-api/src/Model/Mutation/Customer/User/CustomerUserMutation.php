@@ -12,7 +12,6 @@ use Overblog\GraphQLBundle\Validator\InputValidator;
 use Shopsys\FrameworkBundle\Model\Customer\User\CustomerUser;
 use Shopsys\FrameworkBundle\Model\Customer\User\CustomerUserFacade;
 use Shopsys\FrameworkBundle\Model\Customer\User\CustomerUserPasswordFacade;
-use Shopsys\FrameworkBundle\Model\Customer\User\CustomerUserRefreshTokenChainFacade;
 use Shopsys\FrameworkBundle\Model\Customer\User\FrontendCustomerUserProvider;
 use Shopsys\FrontendApiBundle\Model\Customer\User\CustomerUserUpdateDataFactory;
 use Shopsys\FrontendApiBundle\Model\Mutation\BaseTokenMutation;
@@ -38,11 +37,6 @@ class CustomerUserMutation extends BaseTokenMutation implements MutationInterfac
     protected $customerUserPasswordFacade;
 
     /**
-     * @var \Shopsys\FrameworkBundle\Model\Customer\User\CustomerUserRefreshTokenChainFacade
-     */
-    protected $customerUserRefreshTokenChainFacade;
-
-    /**
      * @var \Shopsys\FrontendApiBundle\Model\Customer\User\CustomerUserUpdateDataFactory
      */
     protected $customerUserUpdateDataFactory;
@@ -56,7 +50,6 @@ class CustomerUserMutation extends BaseTokenMutation implements MutationInterfac
      * @param \Shopsys\FrameworkBundle\Model\Customer\User\FrontendCustomerUserProvider $frontendCustomerUserProvider
      * @param \Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface $userPasswordEncoder
      * @param \Shopsys\FrameworkBundle\Model\Customer\User\CustomerUserPasswordFacade $customerUserPasswordFacade
-     * @param \Shopsys\FrameworkBundle\Model\Customer\User\CustomerUserRefreshTokenChainFacade $customerUserRefreshTokenChainFacade
      * @param \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface $tokenStorage
      * @param \Shopsys\FrontendApiBundle\Model\Customer\User\CustomerUserUpdateDataFactory $customerUserUpdateDataFactory
      * @param \Shopsys\FrameworkBundle\Model\Customer\User\CustomerUserFacade $customerUserFacade
@@ -65,7 +58,6 @@ class CustomerUserMutation extends BaseTokenMutation implements MutationInterfac
         FrontendCustomerUserProvider $frontendCustomerUserProvider,
         UserPasswordEncoderInterface $userPasswordEncoder,
         CustomerUserPasswordFacade $customerUserPasswordFacade,
-        CustomerUserRefreshTokenChainFacade $customerUserRefreshTokenChainFacade,
         TokenStorageInterface $tokenStorage,
         CustomerUserUpdateDataFactory $customerUserUpdateDataFactory,
         CustomerUserFacade $customerUserFacade
@@ -75,7 +67,6 @@ class CustomerUserMutation extends BaseTokenMutation implements MutationInterfac
         $this->frontendCustomerUserProvider = $frontendCustomerUserProvider;
         $this->userPasswordEncoder = $userPasswordEncoder;
         $this->customerUserPasswordFacade = $customerUserPasswordFacade;
-        $this->customerUserRefreshTokenChainFacade = $customerUserRefreshTokenChainFacade;
         $this->customerUserUpdateDataFactory = $customerUserUpdateDataFactory;
         $this->customerUserFacade = $customerUserFacade;
     }

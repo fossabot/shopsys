@@ -54,7 +54,7 @@ class ProductPriceCalculationTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $rounding = new Rounding($pricingSettingMock);
+        $rounding = new Rounding();
         $priceCalculation = new PriceCalculation($rounding);
         $basePriceCalculation = new BasePriceCalculation($priceCalculation, $rounding);
 

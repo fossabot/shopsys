@@ -14,11 +14,6 @@ class BrandDataFactory implements BrandDataFactoryInterface
     protected $friendlyUrlFacade;
 
     /**
-     * @var \Shopsys\FrameworkBundle\Model\Product\Brand\BrandFacade
-     */
-    protected $brandFacade;
-
-    /**
      * @var \Shopsys\FrameworkBundle\Component\Domain\Domain
      */
     protected $domain;
@@ -30,18 +25,15 @@ class BrandDataFactory implements BrandDataFactoryInterface
 
     /**
      * @param \Shopsys\FrameworkBundle\Component\Router\FriendlyUrl\FriendlyUrlFacade $friendlyUrlFacade
-     * @param \Shopsys\FrameworkBundle\Model\Product\Brand\BrandFacade $brandFacade
      * @param \Shopsys\FrameworkBundle\Component\Domain\Domain $domain
      * @param \Shopsys\FrameworkBundle\Component\Image\ImageFacade $imageFacade
      */
     public function __construct(
         FriendlyUrlFacade $friendlyUrlFacade,
-        BrandFacade $brandFacade,
         Domain $domain,
         ImageFacade $imageFacade
     ) {
         $this->friendlyUrlFacade = $friendlyUrlFacade;
-        $this->brandFacade = $brandFacade;
         $this->domain = $domain;
         $this->imageFacade = $imageFacade;
     }
