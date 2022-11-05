@@ -1,5 +1,6 @@
 # Shopsys Framework
 [![Build Status](https://travis-ci.org/shopsys/shopsys.svg?branch=master)](https://travis-ci.org/shopsys/shopsys)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fpk16011990%2Fshopsys.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fpk16011990%2Fshopsys?ref=badge_shield)
 
 Shopsys Framework is a **fully functional ecommerce platform for businesses transitioning into tech-companies with their own software development team**.
 It contains the most common B2C and B2B features for online stores, and its infrastructure is prepared for high scalability.
@@ -86,3 +87,6 @@ Some of the Shopsys Framework repositories including [HTTP smoke testing](https:
 
 Shopsys Framework also uses some third-party components and images which are licensed under their own respective licenses.
 The list of these licenses is summarized in [Open Source License Acknowledgements and Third Party Copyrights](./open-source-license-acknowledgements-and-third-party-copyrights.md).
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fpk16011990%2Fshopsys.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fpk16011990%2Fshopsys?ref=badge_large)
